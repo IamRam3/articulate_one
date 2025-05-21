@@ -1,68 +1,72 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <!-- Joint connecting IMU to the robot -->
-  <joint name="imu_joint" type="fixed">
-    <parent link="chassis"/>
-    <child link="imu_frame"/>
-    <origin xyz="0.305 0 0.08" rpy="0 0 0"/>
-  </joint>
+  <xacro:macro name="imu" params="">
 
-  <!-- IMU link -->
-  <link name="imu_frame">
-    <visual>
-      <geometry>
-        <box size="0.010 0.03 0.03"/>
-      </geometry>
-      <material name="red"/>
-    </visual>
+    <!-- Joint connecting IMU to the robot -->
+    <joint name="imu_joint" type="fixed">
+      <parent link="chassis"/>
+      <child link="imu_frame"/>
+      <origin xyz="0.305 0 0.08" rpy="0 0 0"/>
+    </joint>
 
-    <collision>
-      <geometry>
-        <box size="0.03899 0.03785 0.01338"/>
-      </geometry>
-    </collision>
+    <!-- IMU link -->
+    <link name="imu_frame">
+      <visual>
+        <geometry>
+          <box size="0.010 0.03 0.03"/>
+        </geometry>
+        <material name="red"/>
+      </visual>
 
-    <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <mass value="0.031"/>
-      <inertia
-        ixx="6.22969e-06"
-        ixy="0.0"
-        ixz="0.0"
-        iyy="5.92858e-06"
-        iyz="0.0"
-        izz="9.15545e-06"/>
-    </inertial>
-  </link>
+      <collision>
+        <geometry>
+          <box size="0.03899 0.03785 0.01338"/>
+        </geometry>
+      </collision>
 
-  <!-- Material definition -->
-  <material name="imu_black">
-    <color rgba="0.1 0.1 0.1 1"/>
-  </material>
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.031"/>
+        <inertia
+          ixx="6.22969e-06"
+          ixy="0.0"
+          ixz="0.0"
+          iyy="5.92858e-06"
+          iyz="0.0"
+          izz="9.15545e-06"/>
+      </inertial>
+    </link>
 
-  <!-- Gazebo sensor plugin -->
-  <gazebo reference="imu_frame">
-    <material>Gazebo/Red</material>
+    <!-- Material definition -->
+    <material name="imu_black">
+      <color rgba="0.1 0.1 0.1 1"/>
+    </material>
 
-    <sensor name="imu_sensor" type="imu">
-      <pose>0 0 0 0 0 0</pose>
-      <update_rate>15.0</update_rate>
-      <visualize>false</visualize>
-      <always_on>true</always_on>
-      <topic>imu/data</topic>
-      <gz_frame_id>imu_frame</gz_frame_id>
+    <!-- Gazebo sensor plugin -->
+    <gazebo reference="imu_frame">
+      <material>Gazebo/Red</material>
 
-      <!-- Plugin block -->
-      <plugin name="imu_controller" filename="libgazebo_ros_imu_sensor.so">
-        <ros>
-          <namespace>/</namespace>
-          <remapping>~/out:=imu</remapping>
-        </ros>
-        <frame_name>imu_frame</frame_name>
-      </plugin>
+      <sensor name="imu_sensor" type="imu">
+        <pose>0 0 0 0 0 0</pose>
+        <update_rate>15.0</update_rate>
+        <visualize>false</visualize>
+        <always_on>true</always_on>
+        <topic>imu/data</topic>
+        <gz_frame_id>imu_frame</gz_frame_id>
 
-    </sensor>
-  </gazebo>
+        <!-- Plugin block -->
+        <plugin name="imu_controller" filename="libgazebo_ros_imu_sensor.so">
+          <ros>
+            <namespace>/</namespace>
+            <remapping>~/out:=imu</remapping>
+          </ros>
+          <frame_name>imu_frame</frame_name>
+        </plugin>
+
+      </sensor>
+    </gazebo>
+
+  </xacro:macro>
 
 </robot>
